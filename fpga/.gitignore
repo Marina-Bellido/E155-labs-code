@@ -1,0 +1,16 @@
+# Lattice Radian files
+*.html
+impl*/
+*.xml
+.build_status
+.run_manager.ini
+.recovery
+.spread_sheet.ini
+.spreadsheet_view.ini
+*.dir/
+*.log
+*.tcl
+*.ccl
+*.spread_sheet
+*.dmp
+._Real_._Match_.vhd
