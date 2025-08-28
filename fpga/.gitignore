@@ -1,4 +1,4 @@
-# Lattice Radian files
+# Lattice Radiant files
 *.html
 impl*/
 *.xml
@@ -11,6 +11,6 @@ impl*/
 *.log
 *.tcl
 *.ccl
-*.spread_sheet
+*.srp
 *.dmp
-._Real_._Match_.vhd
+._Real_._Math_.vhd
