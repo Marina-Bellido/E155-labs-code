@@ -1,0 +1,47 @@
+// Marina Bellido 
+// mbellido@hmc.edu
+// 2/9/2025
+// TESTBENCH2: TODO EXPLANATION
+
+// Modelsim-ASE requires a timescale directive
+`timescale 1ns / 1ns
+
+module testbenchlab2();
+    logic reset, clk;
+    logic [6:0] clk_signal, clk_signal_expected;
+
+    // Instantiate device under test
+    clockisolation dut(reset, clk, clk_signal);
+    
+	
+    // Generate clock
+    always begin
+        clk = 1; #20830; 
+		clk = 0; #20830;
+    end
+	
+	initial begin
+		reset = 0; #23830 reset =1;
+	end
+
+    // Apply test vectors on rising edge
+    always_ff @(posedge clk, posedge reset) begin
+		if (reset)
+			assert (clk_signal == clk_signal_expected)else $error("Assertion failed clk_signal: %b %b", clk_signal, clk_signal_expected);
+		else begin
+			assert (clk_signal == clk_signal_expected)else $error("Assertion failed clk_signal: %b %b", clk_signal, clk_signal_expected);
+		end
+    end
+    
+	//clock can't be tested here so what im doing is using my sel to check what segment was selected:
+	always_comb begin
+        if (reset == 0) begin
+			clk_signal_expected <= 0 ;
+		end else begin
+			clk_signal_expected <=~clk_signal;
+		end
+
+	end
+	
+endmodule
+
