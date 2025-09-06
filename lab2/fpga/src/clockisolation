@@ -4,23 +4,27 @@
 // Lab2: clockisolation -> TODO EXPLANATION
 	
 
+//MODULE TO TEST CLOCK :
+// Marina Bellido 
+// mbellido@hmc.edu
+// 2/9/2025
+// -> TODO EXPLANATION
+	
+
 module clockisolation(
      input logic reset, clk,
 	 output logic clk_signal);
 	//Lab1 starter code: Blink at 2.4Hz
-   logic int_osc;
+
    logic [23:0] counter; //initializing counter
   
-   // Internal high-speed oscillator
-   HSOSC #(.CLKHF_DIV(2'b01)) 
-         hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
    // Counter
-   always_ff @(posedge int_osc, negedge reset) begin
+   always_ff @(posedge clk, negedge reset) begin
      if(reset == 0) begin
 		 counter <= 0;
 		 clk_signal <= 0;
 	 end else begin           
-		 if(counter == 23'd4_999_999)begin  //5M cycles to flip the LED
+		 if(counter == 23'd1_999)begin  //5M cycles to flip the LED
 			 counter <= 0;
 			 clk_signal <= ~clk_signal; //flip the LED
 		 end else begin
@@ -28,4 +32,5 @@ module clockisolation(
 		 end
 		 end
      end 
-endmodule
+Endmodule
+
