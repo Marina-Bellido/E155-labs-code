@@ -15,5 +15,3 @@ impl*/
 *.dmp
 ._Real_._Math_.vhd
 
-#Ignore Mac Files 
-.DS_Store
