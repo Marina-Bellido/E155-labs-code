@@ -10,6 +10,7 @@
 // at a time.
 //------------------------------------------------------------------------------
 
+
 module clockisolation(
      input logic reset, clk,
 	 output logic clk_signal);
