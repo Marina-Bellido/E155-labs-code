@@ -1,7 +1,15 @@
-// Marina Bellido 
-// mbellido@hmc.edu
-// 2/9/2025
-// TESTBENCH2=CLK: TODO EXPLANATION
+//======================================================================
+// Testbench: testbenchclk2
+// Author: Marina Bellido (mbellido@hmc.edu)
+// Date: 2/9/2025
+//
+// Description:
+// ------------
+// Verifies the `clockisolation` module. Generates a clock/reset, models the 
+// expected divided clock behavior with a counter, and asserts that the DUT’s 
+// output (`clk_signal`) matches the reference (`clk_signal_expected`).
+//
+//======================================================================
 
 // Modelsim-ASE requires a timescale directive
 `timescale 1ns / 1ns

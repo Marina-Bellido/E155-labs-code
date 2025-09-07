@@ -1,15 +1,14 @@
-// Marina Bellido 
-// mbellido@hmc.edu
-// 2/9/2025
-// Lab2: clockisolation -> TODO EXPLANATION
-	
-
-//MODULE TO TEST CLOCK :
-// Marina Bellido 
-// mbellido@hmc.edu
-// 2/9/2025
-// -> TODO EXPLANATION
-	
+//------------------------------------------------------------------------------
+// Module:    clockisolation
+// Author:    Marina Bellido (mbellido@hmc.edu)
+// Date:      2/9/2025
+// File:      lab2_mb.sv
+//------------------------------------------------------------------------------
+// Description:
+// Divides the input clock using a counter. The output `clk_signal` toggles 
+// after a fixed number of cycles, ensuring only one display digit is active 
+// at a time.
+//------------------------------------------------------------------------------
 
 module clockisolation(
      input logic reset, clk,
