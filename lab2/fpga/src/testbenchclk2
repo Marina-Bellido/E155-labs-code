@@ -22,12 +22,14 @@ module testbenchclk2();
     // Instantiate device under test
     clockisolation dut(reset, clk, clk_signal);
     
-    // Generate clock
+    // Generate clock: Runs forever, repeating its block indefinitely.
+    //Useful for periodic behavior like clocks, oscillators, or continuously monitoring signals.
     always begin
         clk = 1; #20830; 
 		clk = 0; #20830;
     end
 	
+    //Runs only once, at time 0 of the simulation:
 	initial begin
 		reset = 0; 
 		#23830 
@@ -50,7 +52,7 @@ module testbenchclk2();
 			 end
 		 end 
 	
-	   always_ff @(*) begin
+	   always_ff @(*) begin // * means “react to any input change” → used for combinational logic.
     // Apply test vectors on rising edge
 			assert (clk_signal == clk_signal_expected) else $error("Assertion failed clk_signal: %b %b", clk_signal, clk_signal_expected);
 		end
