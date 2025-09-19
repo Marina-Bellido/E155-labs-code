@@ -1,7 +1,14 @@
-// Marina Bellido 
-// mbellido@hmc.edu
-// 2/9/2025
-// TESTBENCH2: TODO EXPLANATION
+//------------------------------------------------------------------------------
+// Testbench: testbenchlab2
+// Author:    Marina Bellido (mbellido@hmc.edu)
+// Date:      2/9/2025
+//------------------------------------------------------------------------------
+// Description:
+// Verifies the `lab2_mb` module. Generates clock/reset, iterates through all 
+// input combinations using an 8-bit counter, and checks that LED and 7-segment 
+// outputs match the expected reference model.
+//------------------------------------------------------------------------------
+
 
 // Modelsim-ASE requires a timescale directive
 `timescale 1ns / 1ns
