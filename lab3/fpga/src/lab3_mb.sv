@@ -3,7 +3,7 @@
 // Date:     18/9/2025
 // File:     lab3_mb.sv
 //------------------------------------------------------------------------------
-// Description:
+// Description: TOP MODULE
 // Top-level module that interfaces a keypad with two 7-segment 
 // displays. It scans the keypad, debounces button presses, and 
 // stores the most recent two digits entered. These digits are 

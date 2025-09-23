@@ -19,13 +19,9 @@ module testbenchlab3();
 
 
     // Instantiate device under test
-    // Instantiate device under test
     lab3_mb dut(reset, cols, rows, sel, segment);
 	
 
-	
-	
-//	assign{s1,s2} = counter;
 	
     // Generate clock
     always begin
@@ -39,36 +35,16 @@ module testbenchlab3();
 	
 	initial begin     
 		#20
-	//	key_val = 4'h3;
-		
-        
-	//	key_val = 4'h9;
-		//current_digit =  4'h3;
-		
-
-	//	key_val = 4'hB;
-		//current_digit =  4'h9;
-		
-
-	//	key_val = 4'hF;
-		//current_digit =  4'hB;
 
 	//drive the rows
 		cols = 4'b0000;
-		//stop_counter = 0;
-		//write_enable = 0;
 		
 		#200
         cols = 4'b0001;
 		
-		//display_enable =1;
-		//stop_counter = 1;
-		//write_enable = 1;
 		
 	end
 	
-
-
 
 		
 	//Lab1 starter code

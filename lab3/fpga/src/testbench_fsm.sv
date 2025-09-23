@@ -92,42 +92,36 @@ module testbench_fsm();
 				display_enable_expected  = 0;
 				write_enable_expected    = 0;
 				debounce_enable_expected = 0;
-				//sync_enable =;
 			end 
 			S1: begin
 				stop_counter_expected    = 1; //stop since you found a col on
 				display_enable_expected  = 0;
 				write_enable_expected    = 1;
 				debounce_enable_expected = 0;
-				//sync_enable =;
 			end 
 			S2: begin
 				stop_counter_expected    = 1;
 				display_enable_expected  = 0;
 				write_enable_expected    = 0;
 				debounce_enable_expected = 1;
-				//sync_enable =;
 			end 
 			S3: begin
 				stop_counter_expected    = 1;
 				display_enable_expected  = 0;
 				write_enable_expected    = 0;
 				debounce_enable_expected = 0;
-				//sync_enable =;
 			end 
 			S4: begin
 				stop_counter_expected    = 1;
 				display_enable_expected  = 1;
 				write_enable_expected    = 0;
 				debounce_enable_expected = 0;
-				//sync_enable =;
 			end 
 			S5: begin
 				stop_counter_expected    = 1;
 				display_enable_expected  = 0;
 				write_enable_expected    = 0;
 				debounce_enable_expected = 0;
-				//sync_enable =;
 			end 
 		endcase
 	end

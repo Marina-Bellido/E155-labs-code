@@ -96,9 +96,7 @@ module testbench_rowcounter();
         end
 		 	
         // Assertions to check DUT vs expected behavior
-        //assert (rows == rows_expected) else $error("Assertion failed row: %b %b", rows, rows_expected);
         assert (key_val == key_val_expected) else $error("Assertion failed key_val: %b %b", key_val, key_val_expected);
-        //assert (pushed == pushed_expected) else $error("Assertion failed push: %b %b", pushed, pushed_expected);
     end
 		
     // Placeholder for any additional sequential checks

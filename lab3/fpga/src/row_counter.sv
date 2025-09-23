@@ -63,8 +63,10 @@ module row_counter(
 	end	
 	
 	// === Detect if exactly one key is pressed ===
-	assign pushed = $onehot(cols); // Only valid if exactly one column is active
-	 
+	//assign pushed = $onehot(cols); // Only valid if exactly one column is active
+	assign pushed = (cols != 4'b0000);
+
+
     // === Synchronizers for rows and cols to prevent metastability ===
 	always_ff @(posedge int_osc ) begin
 		if (!reset) begin
