@@ -1,4 +1,4 @@
-// STM32F401RE_TIM.c
+// STM32L432KC_TIM.c
 // TIM functions
 
 #include "STM32L432KC_TIM.h"
@@ -24,3 +24,4 @@ void delay_millis(TIM_TypeDef * TIMx, uint32_t ms){
 
   while(!(TIMx->SR & 1)); // Wait for UIF to go high
 }
+

@@ -1,4 +1,4 @@
-// STM32F401RE_TIM.h
+// STM32L432KC_TIM.h
 // Header for TIM functions
 
 #ifndef STM32L4_TIM_H
@@ -17,3 +17,4 @@ void delay_millis(TIM_TypeDef * TIMx, uint32_t ms);
 void delay_micros(TIM_TypeDef * TIMx, uint32_t us);
 
 #endif
+
