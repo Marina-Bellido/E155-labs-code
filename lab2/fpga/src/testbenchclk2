@@ -1,0 +1,63 @@
+//======================================================================
+// Testbench: testbenchclk2
+// Author: Marina Bellido (mbellido@hmc.edu)
+// Date: 2/9/2025
+//
+// Description:
+// ------------
+// Verifies the `clockisolation` module. Generates a clock/reset, models the 
+// expected divided clock behavior with a counter, and asserts that the DUT’s 
+// output (`clk_signal`) matches the reference (`clk_signal_expected`).
+//
+//======================================================================
+
+
+// Modelsim-ASE requires a timescale directive
+`timescale 1ns / 1ns
+
+module testbenchclk2();
+    logic reset, clk;
+    logic clk_signal, clk_signal_expected;
+	logic [23:0] counter; //initializing counter
+  
+    // Instantiate device under test
+    clockisolation dut(reset, clk, clk_signal);
+    
+    // Generate clock: Runs forever, repeating its block indefinitely.
+    //Useful for periodic behavior like clocks, oscillators, or continuously monitoring signals.
+    always begin
+        clk = 1; #20830; 
+		clk = 0; #20830;
+    end
+	
+    //Runs only once, at time 0 of the simulation:
+	initial begin
+		reset = 0; 
+		#23830 
+		reset =1;
+
+	end
+
+	
+	 always_ff @(posedge clk, negedge reset) begin
+		 if(reset == 0) begin
+			 counter <= 0;
+			 clk_signal_expected <= 0;
+		 end else begin           
+			 if(counter == 23'd1_999)begin  //5M cycles to flip the LED
+				 counter <= 0;
+				 clk_signal_expected <= ~clk_signal_expected; //flip the LED
+			 end else begin
+				counter <= counter + 1;
+			 end
+			 end
+		 end 
+	
+	   always_ff @(*) begin // * means “react to any input change” → used for combinational logic.
+    // Apply test vectors on rising edge
+			assert (clk_signal == clk_signal_expected) else $error("Assertion failed clk_signal: %b %b", clk_signal, clk_signal_expected);
+		end
+
+	
+endmodule
+

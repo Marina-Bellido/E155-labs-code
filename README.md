@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tutorial for Configuring Interrupts on STM32L432KC
 
 This tutorial demonstrates how to configure interrupts on the STM32L432KC.
@@ -14,3 +15,8 @@ The steps to configure the interrupt are as follows:
 4.   Set Interrupt Mask Register (`IMR`)
 5.   Select rising/falling edge trigger
 6.   Turn on the interrupt in the `NVIC_ISER` (NB: The bits in the NVIC registers correspond to the interrupt position in the vector table).
+=======
+# E155 Lab1
+
+This repo includes code to verify the proper assembly of the E155 developmend board - and operation of the MCU and FPGA.
+>>>>>>> 6b144011689f38dcad28603ed045440036f5f630

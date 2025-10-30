@@ -1,0 +1,85 @@
+//------------------------------------------------------------------------------
+// Testbench: testbenchlab2
+// Author:    Marina Bellido (mbellido@hmc.edu)
+// Date:      2/9/2025
+//------------------------------------------------------------------------------
+// Description:
+// Verifies the `lab2_mb` module. Generates clock/reset, iterates through all 
+// input combinations using an 8-bit counter, and checks that LED and 7-segment 
+// outputs match the expected reference model.
+//------------------------------------------------------------------------------
+
+
+// Modelsim-ASE requires a timescale directive
+`timescale 1ns / 1ns
+
+module testbenchlab2();
+    logic clk, reset;
+    logic [3:0] s, s1, s2;
+    logic [4:0] led, led_expected;
+	logic [1:0] sel;
+    logic [6:0] segment, segment_expected;
+	logic [7:0] counter; //creating an 8 bit bus: first 4 bits are s0 and the other s2.
+	//By adding a 1 at each counter you will be testing all possible combinations
+
+    // Instantiate device under test
+    lab2_mb dut(reset, s1, s2, led, sel, segment);
+    
+	assign{s1,s2} = counter;
+	
+    // Generate clock
+    always begin
+        clk = 1; #20830; 
+		clk = 0; #20830;
+    end
+	
+	initial begin
+		reset = 0; #23830 reset =1;
+	end
+
+    // Apply test vectors on rising edge
+    always_ff @(posedge clk, posedge reset) begin
+		if (!reset)
+			counter <= 8'b0;
+		else if (counter != 8'b11111111) begin
+			counter <= counter +1;
+			$display("led,s1,s2: %b %b %b", led, s1, s2);
+			assert (led == led_expected) else $error("Assertion failed led: %b %b %b", led, s1, s2);
+			assert (segment == segment_expected)else $error("Assertion failed segment: %b %b", segment, segment_expected);
+		end else begin
+			counter <= 8'b0;
+		end
+    end
+    
+	//clock can't be tested here so what im doing is using my sel to check what segment was selected:
+	always_comb begin
+        if (sel == 2'b01) begin
+			s = s1;
+		end else begin
+			s = s2;
+		end
+
+		led_expected = s1 + s2;
+	
+		case(s)
+			4'd0: segment_expected = 7'b1000000; // 0: A,B,C,D,E,F ON; G OFF
+			4'd1: segment_expected = 7'b1111001; // 1: B,C
+			4'd2: segment_expected = 7'b0100100; // 2: A,B,G,E,D
+			4'd3: segment_expected = 7'b0110000; // 3: A,B,C,G,D
+			4'd4: segment_expected = 7'b0011001; // 4: B,C,F,G
+			4'd5: segment_expected = 7'b0010010; // 5: A,C,D,F,G
+			4'd6: segment_expected = 7'b0000010; // 6: A,C,D,E,F,G
+			4'd7: segment_expected = 7'b1111000; // 7: A,B,C
+			4'd8: segment_expected = 7'b0000000; // 8: all segments ON
+			4'd9: segment_expected = 7'b0010000; // 9: A,B,C,D,F,G
+			4'd10: segment_expected = 7'b0001000; // A: A,B,C,E,F,G
+			4'd11: segment_expected = 7'b0000011; // B: C,D,E,F,G
+			4'd12: segment_expected = 7'b1000110; // C: A,D,E,F
+			4'd13: segment_expected = 7'b0100001; // D: B,C,D,E,G
+			4'd14: segment_expected = 7'b0000110; // E: A,D,E,F,G
+			4'd15: segment_expected = 7'b0001110; // F: A,E,F,G
+			default: segment_expected = 7'b1111111; // blank
+		endcase
+	end
+	
+endmodule

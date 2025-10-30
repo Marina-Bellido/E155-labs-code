@@ -1,0 +1,113 @@
+//------------------------------------------------------------------------------
+// Author:   Marina Bellido (mbellido@hmc.edu)
+// Date:     18/9/2025
+// File:     row_counter.sv
+//=============================================================
+// Description: 
+// This module handles keypad scanning by cycling through row 
+// signals and detecting which key (row + column) is pressed. 
+// It synchronizes row/col signals to avoid metastability, 
+// identifies valid one-hot keypresses, and outputs the 
+// corresponding hex value for the pressed key.
+//
+// Inputs:
+//   - reset, int_osc: reset and oscillator clock
+//   - stop_counter: pauses the row scanning counter
+//   - write_enable: enables writing a detected key to key_val
+//   - cols: column inputs from keypad
+//
+// Outputs:
+//   - rows: row outputs for keypad scanning
+//   - key_val: hex code of the pressed key
+//   - pushed: asserted when a valid key is pressed
+//=============================================================
+
+module row_counter(
+	input logic reset, int_osc, // internal oscillator
+	input logic stop_counter, write_enable,
+	input logic [3:0] cols,
+	output logic [3:0] rows,
+	output logic [7:0] key_val,
+	output logic pushed);
+
+	// Internal signals
+	logic [3:0] colss, rowss;   // Latched versions of cols and rows
+	logic [3:0] sync_r, sync_c; // Synchronizers for metastability protection
+	logic [3:0] counterr;       // Row scanning counter
+	
+	// === Row scan counter ===
+	always_ff @(posedge int_osc or negedge reset) begin
+		if (reset == 0) begin
+			counterr = 0;
+		end else if (stop_counter == 0) begin
+			if (counterr == 4'd15)
+				counterr = 4'b0;         // Wrap around after 15
+			else
+				counterr = counterr + 4'b0001;
+		end
+		else begin
+			counterr = counterr;        // Hold when stop_counter active
+		end
+	end
+
+	// === Row selection logic ===
+	// Each row is activated for 4 counts of the counter
+	always_comb begin
+		casez (counterr)
+			4'd0,  4'd1,  4'd2,  4'd3 : rowss = 4'b1000;
+			4'd4,  4'd5,  4'd6,  4'd7 : rowss = 4'b0100;
+			4'd8,  4'd9,  4'd10, 4'd11: rowss = 4'b0010;
+			4'd12, 4'd13, 4'd14, 4'd15: rowss = 4'b0001;
+			default: rowss = 4'b1111;   // Safe default (no row active)
+		endcase
+	end	
+	
+	// === Detect if exactly one key is pressed ===
+	//assign pushed = $onehot(cols); // Only valid if exactly one column is active
+	assign pushed = (cols != 4'b0000);
+
+
+    // === Synchronizers for rows and cols to prevent metastability ===
+	always_ff @(posedge int_osc ) begin
+		if (!reset) begin
+			sync_r <= 0;
+			rows   <= 0;
+			sync_c <= 0;
+			colss  <= 0;
+		end else begin
+			sync_r <= rowss; // Register row selection
+			rows   <= sync_r;
+			sync_c <= cols;  // Register column inputs
+			colss  <= sync_c;
+		end
+	end
+	
+    // === Column/row mapping to key values ===
+	// Each case matches a unique row/column combination to a hex digit
+    always_comb begin
+		if(write_enable) begin
+			case({rows[1], rows[2], colss[0], rows[3], colss[1], colss[2], colss[3], rows[0]})
+				8'b0001_1000: key_val = 4'h0; // 0 = R3 & C1 
+				8'b0010_0001: key_val = 4'h1; // 1 = R0 & C0
+				8'b0000_1001: key_val = 4'h2; // 2 = R0 & C1
+				8'b0000_0101: key_val = 4'h3; // 3 = R0 & C2
+				8'b1010_0000: key_val = 4'h4; // 4 = R1 & C0
+				8'b1000_1000: key_val = 4'h5; // 5 = R1 & C1
+				8'b1000_0100: key_val = 4'h6; // 6 = R1 & C2
+				8'b0110_0000: key_val = 4'h7; // 7 = R2 & C0
+				8'b0100_1000: key_val = 4'h8; // 8 = R2 & C1
+				8'b0100_0100: key_val = 4'h9; // 9 = R2 & C2
+				8'b0000_0011: key_val = 4'hA; // A = R0 & C3 
+				8'b1000_0010: key_val = 4'hB; // B = R1 & C3
+				8'b0100_0010: key_val = 4'hC; // C = R2 & C3 
+				8'b0001_0010: key_val = 4'hD; // D = R3 & C3 
+				8'b0011_0000: key_val = 4'hE; // E = R3 & C0 
+				8'b0001_0100: key_val = 4'hF; // F = R3 & C2 
+				default:      key_val = 4'h0; // Default = 0
+			endcase
+        end else begin
+          // If not enabled, hold previous key_val
+        end
+    end
+
+endmodule
