@@ -121,12 +121,12 @@ volatile bool pastAstate = 0, pastBstate = 0; // previous states of A and B so y
 
 
 // Interrupt Service Routine (ISR) for handling external interrupts from a quadrature encoder
-//      ISR is called whenever either encoder channel A or B changes state.
+//      ISR is called whenever either encoder channel A or B changes state (pins).
 //      You never call it directly: The hardware calls it automatically when the corresponding EXTI 
 //                                  pin detects an edge (rising or falling) that you have enabled.
+// Mention what variables can't be touched bc already used by handler like counter and newAstate
 
-//void EXTI6_IRQHandler(){
-//only called when 1 pin goes i need a seperate handler for each pin 
+//void EXTI6_IRQHandler(){ 
 void EXTI9_5_IRQHandler(void){
     bool newAstate = 0, newBstate = 0;
     // Place current states of encoder channels A and B into local variables.
